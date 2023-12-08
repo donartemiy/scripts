@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Sprint 4: Bash scripts.
-# Script shows systems info, users info.
+# Script shows systems info, users info to Ubuntu 20.
 
 # You can find examples to use possabilities of bash: 
 #   functions, getopt, loops (while, for), conditionals(if, case), awk, grep
