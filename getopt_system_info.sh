@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Sprint 4: Bash scripts.
-# Script shows systems info, users info to Ubuntu 20.
+# Script shows systems info, users info.
 
 # You can find examples to use possabilities of bash: 
 #   functions, getopt, loops (while, for), conditionals(if, case), awk, grep
 
 # Data gets from:
-#   Utilities: ifconfig; sudo -v; netstat; lsblk -fs -d; free -h; uptime; df -h; who
+#   Utilities: ifconfig; sudo -v; netstat; lsblk -fs -d; free -h; uptime; df -h; who; getent
 #   files:
 #     /proc/loadavg
 #     /proc/diskstats
@@ -76,8 +76,11 @@ while true; do
     case "$1" in
         "--host")
             echo "Host info:"
-            AMOUNTCORE=`cat /proc/cpuinfo | awk '/cpu cores/ { sum += $4} END { print sum}'` && echo "1. Quantity of cores: $AMOUNTCORE"
-            MEMINF=`free -h | grep 'Mem' | awk '{ print "total", $2, "/", "avail", $7}'` && echo "2. Memory info: $MEMINF"
+            # split pipe segment \ + |
+            AMOUNTCORE=`cat /proc/cpuinfo \
+                | awk '/cpu cores/ { sum += $4} END { print sum}'` && echo "1. Quantity of cores: $AMOUNTCORE"
+            MEMINF=`free -h | grep 'Mem' \
+                | awk '{ print "total", $2, "/", "avail", $7}'` && echo "2. Memory info: $MEMINF"
             echo "3. Slisten ports:"
             show_disk_stat
             LOADAVG=`awk '{ print "\n - last 1m", $1";\n", "- last 5m", $2";\n", "- last 15m", $3 }' /proc/loadavg` && echo "4. Load average: $LOADAVG"
@@ -87,19 +90,21 @@ while true; do
             show_interface_data
             echo "8. Slisten ports:"
             show_open_sockets
-            break;;
+            break ;;
         "--user")
             echo "1. User's list in system:"
-            awk -F ':' '{printf " " $1 }' /etc/passwd
+            awk -F ':' '{printf "   " $1 }' /etc/passwd
             echo
             echo "2. Root users list in system:"
-            awk -F: '$3 == 0 { print " " $1 }' /etc/passwd
+            awk -F: '$3 == 0 { print "   " $1 }' /etc/passwd
             echo "3. User's list who is logged on:"
-            who | awk '{ print $1 }'
-            break;;
+            echo "   $(getent group sudo)"
+            break
+            ;;
         "--help")
             show_help
-            break;;
+            break
+            ;;
         *)
             echo "wrong OPTIONS / arguments"
             break;;
