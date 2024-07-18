@@ -8,3 +8,6 @@ $ ping www.google.fr | while read pong; do echo "$(date): $pong"; done
 
 # Uninstall docker
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+
+# heathcheck
+$ while true; do time curl -sSf  http://172.21.240.152/-/readiness?token=HDfnTkzbhMc4sPPKdrEp; sleep 1; done
