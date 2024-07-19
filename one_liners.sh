@@ -10,4 +10,4 @@ $ ping www.google.fr | while read pong; do echo "$(date): $pong"; done
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
 # heathcheck
-$ while true; do time curl -sSf  http://172.21.1.1/-/readiness?token=XXXXXp; sleep 1; done
+$ while true; do time curl -sSf  http://172.21.1.1/-/readinessX; sleep 1; done
