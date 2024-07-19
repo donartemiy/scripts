@@ -42,12 +42,15 @@ function show_interface_data() {
 
 function show_open_sockets() {
     TESTSUDO=`sudo -v`
+    echo netstat:
     # root check
     if [[ -z $TESTSUDO ]]; then
         sudo netstat -nltp | awk '/LISTEN/ {print $4}' | awk -F ':' '{print " - ", $NF}' | sort | uniq
     else
         netstat -nltp | awk '/LISTEN/ {print $4}' | awk -F ':' '{print " - ", $NF}' | sort | uniq
     fi
+    echo ss-nlptu:
+    sudo ss -nlptu
 }
 
 
@@ -78,10 +81,11 @@ while true; do
             echo "Host info:"
             # split pipe segment \ + |
             AMOUNTCORE=`cat /proc/cpuinfo \
-                | awk '/cpu cores/ { sum += $4} END { print sum}'` && echo "1. Quantity of cores: $AMOUNTCORE"
+                | awk '/cpu cores/ { sum += $4} END { print sum}'` && echo "0. Quantity of cores: $AMOUNTCORE"
+            CPU_MHZ=`cat /proc/cpuinfo | grep -E 'model name|cpu MHz|bogomips'` && echo "1. CPU perfomance:"&& echo "$CPU_MHZ"
             MEMINF=`free -h | grep 'Mem' \
                 | awk '{ print "total", $2, "/", "avail", $7}'` && echo "2. Memory info: $MEMINF"
-            echo "3. Slisten ports:"
+            echo "3. Disk info:"
             show_disk_stat
             LOADAVG=`awk '{ print "\n - last 1m", $1";\n", "- last 5m", $2";\n", "- last 15m", $3 }' /proc/loadavg` && echo "4. Load average: $LOADAVG"
             TIME=`uptime | awk '{ print $1 }'` && echo "5. DATE (UTC): $TIME" 
