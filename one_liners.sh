@@ -11,3 +11,6 @@ for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker c
 
 # heathcheck
 $ while true; do time curl -sSf  http://172.21.1.1/-/readinessX; sleep 1; done
+
+# remoove unused strings
+grep -v '^ *#\|^ *$' /etc/squid/squid.conf
