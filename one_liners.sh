@@ -14,3 +14,6 @@ $ while true; do time curl -sSf  http://172.21.1.1/-/readinessX; sleep 1; done
 
 # remoove unused strings
 grep -v '^ *#\|^ *$' /etc/squid/squid.conf
+
+# get stat CPU for docker container
+$ while true; do docker stats app-server --no-stream | grep app-server | awk -v date="$(date +%T)" '{print $3, date}' | sed 's/%//g' >> docker_stats_data.txt; done
