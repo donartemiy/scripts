@@ -23,3 +23,7 @@ $ docker volume ls -q | grep -v "graylog" | xargs docker volume rm
 
 # Удаляем выключенные контейнеры, не связанные образы/volumes
 $ docker system prune -a -f --volumes
+
+
+$ while true; do      date +"%T" >> docker_stats_data_3.txt;     docker stats --no-stream >> docker_stats_data_3.txt;     sleep 2; done
+$ cat docker_stats_data_3.txt | awk '{print $2, $3}' | grep '%' | sort -rnk 2 | head -20  # посмотреть максимальную утилизацию CPU
