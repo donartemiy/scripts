@@ -17,3 +17,9 @@ grep -v '^ *#\|^ *$' /etc/squid/squid.conf
 
 # get stat CPU for docker container
 $ while true; do docker stats app-server --no-stream | grep app-server | awk -v date="$(date +%T)" '{print $3, date}' | sed 's/%//g' >> docker_stats_data.txt; done
+
+# Удаляем все вольюмы без graylog в имени
+$ docker volume ls -q | grep -v "graylog" | xargs docker volume rm
+
+# Удаляем выключенные контейнеры, не связанные образы/volumes
+$ docker system prune -a -f --volumes
